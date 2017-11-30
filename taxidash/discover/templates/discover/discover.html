@@ -7,53 +7,59 @@
     <title>FUN Taxi Dash</title>
     <link rel="stylesheet" type="text/css" href="{% static 'discover/styles/global.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'discover/styles/discover.css' %}">
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
 </head>
 <body>
 <header class="header">
     <div id="taxidashIcon"></div>
     <h1 class="header_title">Taxi Dash</h1>
-    <button id="butRefresh" class="headerButton" aria-label="Refresh"></button>
-    <button id="butAdd" class="headerButton" aria-label="Add"></button>
+{#    <button id="butRefresh" class="headerButton" aria-label="Refresh"></button>#}
+    <form action="{% url 'discover:organize' %}" method="get"><button id="butAdd" class="headerButton" aria-label="Add"></button></form>
 </header>
 
 <main class="main">
     {% if trips %}
         <div class="list-msg">Here are the trips near you:</div>
-        {% for trip in trips %}
-            <div class="card cardTemplate trip">
+        {% include 'discover/triplist.html' %}
+        {% comment %}{% for trip in trips %}
+            <div class="card cardTemplate trip" id="{{ trip.id }}">
                 <div class="left">
-                    <div class="organizer label"><a href="/discover/{{ trip.id }}">{{ trip.organizer }}</a></div>
+                    <div class="organizer label">{{ trip.organizer }}</div>
                     <div class="meetup-point">
-                        <div class="locpin"></div><div class="location"><a href="/discover/{{ trip.id }}">{{ trip.meetup_pt }}</a></div>
+                        <div class="locpin"></div><div class="location">{{ trip.meetup_pt }}</div>
                     </div>
                 </div>
                 <div class="right">
                     <div class="label">Available seats</div>
                     <div class="seats">
-                        <span class="available">2</span><span class="maxSeats">/4人</span>
+                        <span class="available">{{ trip.avail_passengers }}</span><span class="maxSeats">/4人</span>
                     </div>
                 </div>
             </div>
-        {% endfor %}
+        {% endfor %}{% endcomment %}
     {% else %}
         <div class="list-msg">There are 0 trips available. Press the (+) icon to organize a new one. </div>
     {% endif %}
 </main>
 
-<div class="dialog-container" id="join" hidden>
+<div class="dialog-container" id="join">
     <div class="dialog">
         <div class="dialog-title">Join a trip</div>
-        <div class="dialog-body">
-            <div class="dialog-form">
-                <div id="lblPassenger">Your name</div>
-                <input id="txtPassenger" type="text">
+        <form class="dialog-body" action="{% url 'discover:join' %}" method="post">
+            {% csrf_token %}
+            <div class="dialog-body">
+                <div class="dialog-form">
+                    <div id="lblPassenger">Your name</div>
+                    <input name="passenger" id="txtPassenger" type="text">
+                    <input name="trip_id" id="trip_id" type="hidden">
+                </div>
+                <div class="dialog-info">Do you want to join <span class="dialog-organizer"></span>'s group?</div>
             </div>
-            <div class="dialog-info">Do you want to join {name}'s group?</div>
-        </div>
-        <div class="dialog-buttons">
-            <button id="butCancel" class="button">Cancel</button>
-            <button id="butJoin" class="button preferred">Join</button>
-        </div>
+            <div class="dialog-buttons">
+                <input type="button" id="butCancel" class="button" value="Cancel"/>
+                <button type="submit" id="butJoin" class="button preferred">Join</button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -63,5 +69,10 @@
     </svg>
     <div class="wait-msg">Looking for trips.</div>
 </div>
+
+<script src="{% static 'discover/scripts/discover.js' %}"></script>
+<script>
+    window.CSRF_TOKEN = "{{ csrf_token }}";
+</script>
 </body>
 </html>

@@ -1,0 +1,17 @@
+{% for trip in trips %}
+    <div class="card cardTemplate trip" id="{{ trip.id }}">
+        <div class="left">
+            <div class="organizer label">{{ trip.organizer }}</div>
+            <div class="meetup-point">
+                <div class="locpin"></div>
+                <div class="location">{{ trip.meetup_pt }}</div>
+            </div>
+        </div>
+        <div class="right">
+            <div class="label">Available seats</div>
+            <div class="seats">
+                <span class="available">{{ trip.avail_passengers }}</span><span class="maxSeats">/4人</span>
+            </div>
+        </div>
+    </div>
+{% endfor %}
