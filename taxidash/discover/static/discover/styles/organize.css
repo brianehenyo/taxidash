@@ -32,19 +32,9 @@
     opacity: 1;
 }
 
-.header #butRefresh {
-    background: url("../images/ic_refresh_24px.svg") center center no-repeat;
-}
-
-.header #butAdd {
-    background: url('../images/ic_add_24px.svg') center center no-repeat;
-}
-
-.header #taxidashIcon {
-    width: 24px;
-    height: 24px;
-    margin-right: 10px;
-    background: url('../images/ic_taxi_24px.png') center center no-repeat;
+.header #butCancel {
+    background: url('../images/ic_cancel_24px.svg') center center no-repeat;
+    /*find replacement svg. dame da :( */
 }
 
 .list-msg {
@@ -145,127 +135,57 @@
     -webkit-overflow-scrolling: touch;
 }
 
+.name-input {
+    margin: 16px;
+    display: flex;
+    flex-flow: column;
+}
+
+.name-input input {
+    font-size: 1em;
+    margin-top: 5px;
+}
+
+span {
+    display: block;
+    margin-left: 10px;
+}
+
+.meetup_desc {
+    display: flex;
+    flex-flow: column;
+}
+
+.meetup-address {
+    font-size: 0.8em;
+}
+
 .card {
     display: flex;
     flex-flow: row;
-    justify-content: space-between;
-}
-
-.card:hover {
-    cursor: pointer;
-}
-
-.meetup-point {
-    display: flex;
-    justify-content: space-between;
-    flex-flow: row;
-}
-
-.locpin {
-    width: 24px;
-    height: 24px;
-    background: url("../images/ic_locpin_24px.svg") center center no-repeat;
-}
-
-.label {
-    font-size: 12px;
-}
-
-.dialog-container {
-    visibility: hidden;
-    background: rgba(0, 0, 0, 0.57);
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    pointer-events: none;
-    will-change: opacity;
-    -webkit-transition: opacity 0.333s cubic-bezier(0, 0, 0.21, 1);
-    transition: opacity 0.333s cubic-bezier(0, 0, 0.21, 1);
-}
-
-.dialog-container--visible {
-    visibility: visible;
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.dialog {
-    background: #FFF;
-    border-radius: 2px;
-    box-shadow: 0 0 14px rgba(0, 0, 0, 0.24), 0 14px 28px rgba(0, 0, 0, 0.48);
-    min-width: 280px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    -webkit-transform: translate(-50%, -50%) translateY(30px);
-    transform: translate(-50%, -50%) translateY(30px);
-    -webkit-transition: -webkit-transform 0.333s cubic-bezier(0, 0, 0.21, 1) 0.05s;
-    transition: -webkit-transform 0.333s cubic-bezier(0, 0, 0.21, 1) 0.05s;
-    transition: transform 0.333s cubic-bezier(0, 0, 0.21, 1) 0.05s;
-    transition: transform 0.333s cubic-bezier(0, 0, 0.21, 1) 0.05s, -webkit-transform 0.333s cubic-bezier(0, 0, 0.21, 1) 0.05s;
-}
-
-/*.dialog > div {*/
-    /*padding-left: 10px;*/
-    /*padding-right: 10px;*/
-/*}*/
-
-.dialog-title {
     padding: 10px;
-    font-size: 1.25em;
-    color: #FFFFFF;
-    background-color: #2CBAFF;
-}
-
-.dialog-body{
-    margin: 10px;
-}
-
-.dialog-body input {
-    width: 100%;
-    font-size: 1em;
-}
-
-.dialog-buttons {
-    display: flex;
-    height: 2em;
-    margin: 10px;
-}
-
-.dialog-buttons input,button {
-    width: 100%;
-    font-size: 1em;
-}
-
-.dialog-organizer {
-    color: #2CBAFF;
-}
-
-.preferred {
-    background-color: #2CBAFF;
-    border-color: #2CBAFF;
-    color: #FFFFFF;
-}
-
-input[id*="Cancel"] {
-    background-color: #FFFFFF;
-    border-color: #2CBAFF;
-    color: #2CBAFF;
-}
-
-.dialog-info {
-    margin-top: 10px;
-}
-
-.card {
-    padding: 16px;
-    position: relative;
+    /*position: relative;*/
     box-sizing: border-box;
     background: #FFB356;
     border-radius: 2px;
     margin: 16px;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+
+.submit-div {
+    width: 100%;
+    height: 56px;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+}
+
+#btnSubmit {
+    background-color: #2CBAFF;
+    border-color: #2CBAFF;
+    color: #030303;
+    width: 100%;
+    height: 2em;
+    font-size: 1em;
+    margin: 16px;
 }

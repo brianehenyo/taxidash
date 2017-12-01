@@ -8,25 +8,50 @@
     <link rel="stylesheet" type="text/css" href="{% static 'discover/styles/global.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'discover/styles/discover.css' %}">
     <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                console.log("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function showPosition(position) {
+            console.log(position.coords.latitude);
+            console.log(position.coords.longitude);
+            $('#hdnLatitude').val(position.coords.latitude);
+            $('#hdnLongitude').val(position.coords.longitude);
+{#            $('#hdnLatitude').val(41.837552);#}
+{#            $('#hdnLongitude').val(140.765535);#}
+        }
+
+        getLocation();
+    </script>
 </head>
 <body>
 <header class="header">
     <div id="taxidashIcon"></div>
     <h1 class="header_title">Taxi Dash</h1>
-{#    <button id="butRefresh" class="headerButton" aria-label="Refresh"></button>#}
-    <form action="{% url 'discover:organize' %}" method="get"><button id="butAdd" class="headerButton" aria-label="Add"></button></form>
+    <form action="{% url 'discover:organize' %}" method="post">
+        {% csrf_token %}
+        <button id="butAdd" class="headerButton" aria-label="Add"></button>
+        <input type="hidden" id="hdnLatitude" name="latitude">
+        <input type="hidden" id="hdnLongitude" name="longitude">
+    </form>
 </header>
 
 <main class="main">
     {% if trips %}
         <div class="list-msg">Here are the trips near you:</div>
-        {% include 'discover/triplist.html' %}
-        {% comment %}{% for trip in trips %}
+        {#        {% include 'discover/triplist.html' %}#}
+        {% for trip in trips %}
             <div class="card cardTemplate trip" id="{{ trip.id }}">
                 <div class="left">
                     <div class="organizer label">{{ trip.organizer }}</div>
                     <div class="meetup-point">
-                        <div class="locpin"></div><div class="location">{{ trip.meetup_pt }}</div>
+                        <div class="locpin"></div>
+                        <div class="location">{{ trip.meetup_pt }}</div>
                     </div>
                 </div>
                 <div class="right">
@@ -36,9 +61,9 @@
                     </div>
                 </div>
             </div>
-        {% endfor %}{% endcomment %}
+        {% endfor %}
     {% else %}
-        <div class="list-msg">There are 0 trips available. Press the (+) icon to organize a new one. </div>
+        <div class="list-msg">There are 0 trips available. Press the (+) icon to organize a new one.</div>
     {% endif %}
 </main>
 
@@ -67,12 +92,9 @@
     <svg viewBox="0 0 32 32" width="32" height="32">
         <circle id="spinner" cx="16" cy="16" r="14" fill="none"></circle>
     </svg>
-    <div class="wait-msg">Looking for trips.</div>
+    <div class="wait-msg">Looking for nearby trips.</div>
 </div>
 
 <script src="{% static 'discover/scripts/discover.js' %}"></script>
-<script>
-    window.CSRF_TOKEN = "{{ csrf_token }}";
-</script>
 </body>
 </html>

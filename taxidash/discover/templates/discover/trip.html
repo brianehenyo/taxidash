@@ -12,8 +12,9 @@
 <header class="header">
     <div id="taxidashIcon"></div>
     <h1 class="header_title">Taxi Dash</h1>
-    <button id="butRefresh" class="headerButton" aria-label="Refresh"></button>
-    <button id="butAdd" class="headerButton" aria-label="Add"></button>
+    <form action="{% url 'discover:index' %}" method="get">
+        <button id="butCancel" class="headerButton" aria-label="Cancel"></button>
+    </form>
 </header>
 
 <main class="main">
@@ -39,29 +40,5 @@
         <div class="list-msg">There are 0 trips available. Press the (+) icon to organize a new one. </div>
     {% endif %}
 </main>
-
-<div class="dialog-container" id="join" hidden>
-    <div class="dialog">
-        <div class="dialog-title">Join a trip</div>
-        <div class="dialog-body">
-            <div class="dialog-form">
-                <div id="lblPassenger">Your name</div>
-                <input id="txtPassenger" type="text">
-            </div>
-            <div class="dialog-info">Do you want to join {name}'s group?</div>
-        </div>
-        <div class="dialog-buttons">
-            <button id="butCancel" class="button">Cancel</button>
-            <button id="butJoin" class="button preferred">Join</button>
-        </div>
-    </div>
-</div>
-
-<div class="loader">
-    <svg viewBox="0 0 32 32" width="32" height="32">
-        <circle id="spinner" cx="16" cy="16" r="14" fill="none"></circle>
-    </svg>
-    <div class="wait-msg">Looking for trips.</div>
-</div>
 </body>
 </html>

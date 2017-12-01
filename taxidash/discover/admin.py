@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import Trip, Passenger, Meetup
 
 class MeetupAdmin(admin.ModelAdmin):
-    list_display = ('name', 'latlong')
+    list_display = ('name', 'latitude', 'longitude', 'location')
 
 class TripAdmin(admin.ModelAdmin):
     list_display = ('organizer', 'meetup_pt')

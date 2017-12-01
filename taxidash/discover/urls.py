@@ -8,5 +8,5 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^join/$', views.join, name='join'),
     url(r'^organize/$', views.organize, name='organize'),
-    url(r'^refreshtrips/$', views.refreshtrips, name='refreshT'),
+    url(r'^createTrip/$', views.createTrip, name='createTrip'),
 ]

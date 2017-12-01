@@ -12,24 +12,6 @@
 
     var selectedTrip = "";
 
-    /*$('#butRefresh').on('click', function () {
-        $.ajax({
-            type: 'post',
-            url: 'refreshtrips/',
-            data: {
-                'csrfmiddlewaretoken': window.CSRF_TOKEN // from index.html
-            },
-            success: function (data) {
-                console.log(data.trips);
-                // append html to the posts div
-                // $('#div').append(data.posts_html);
-            },
-            error: function (xhr, status, error) {
-                // shit happens friends!
-            }
-        });
-    });*/
-
     //Add event listener for all cards
     trip_cards = $('.card');
     trip_cards.each(function (index) {
@@ -70,5 +52,22 @@
             app.addDialog.classList.remove('dialog-container--visible');
         }
     };
+
+    // function getLocation() {
+    //     if (navigator.geolocation) {
+    //         navigator.geolocation.getCurrentPosition(showPosition);
+    //     } else {
+    //         console.log("Geolocation is not supported by this browser.");
+    //     }
+    // }
+    //
+    // function showPosition(position) {
+    //     console.log(position.coords.latitude);
+    //     console.log(position.coords.longitude);
+    //     $('#hdnLatitude').val(position.coords.latitude);
+    //     $('#hdnLongitude').val(position.coords.longitude);
+    // }
+    //
+    // getLocation();
 
 })();
