@@ -112,3 +112,8 @@ body {
     -ms-flex: 1;
     flex: 1;
 }
+
+.error {
+    color: orangered;
+    margin: 5px 15px 10px;
+}

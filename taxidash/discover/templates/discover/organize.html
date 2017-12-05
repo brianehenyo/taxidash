@@ -23,6 +23,7 @@
         <div class="name-input">
             <label for="txtOrganizer">Your name (名) </label>
             <input id="txtOrganizer" name="organizer" type="text">
+            {% if error_message %}<p class="error"><strong>{{ error_message }}</strong></p>{% endif %}
         </div>
 
         {% if nearby_meetups %}
@@ -48,13 +49,6 @@
         </div>
     </form>
 </main>
-
-<div class="loader">
-    <svg viewBox="0 0 32 32" width="32" height="32">
-        <circle id="spinner" cx="16" cy="16" r="14" fill="none"></circle>
-    </svg>
-    <div class="wait-msg">Looking for nearby locations.</div>
-</div>
 
 </body>
 </html>

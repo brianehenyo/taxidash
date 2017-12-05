@@ -10,18 +10,26 @@
 </head>
 <body>
 <header class="header">
-    <div class="left">
-        <div class="organizer label">{{ trip.organizer }}</div>
-        <div class="meetup-point">
-            <div class="locpin"></div>
-            <div class="location">{{ trip.meetup_pt }}</div>
+    {% if trip %}
+        <div class="left">
+            <div class="organizer label">{{ trip.organizer }}</div>
+            <div class="meetup-point">
+                <div class="locpin"></div>
+                <div class="location">{{ trip.meetup_pt }}</div>
+            </div>
         </div>
-    </div>
+    {% else %}
+        <div id="taxidashIcon"></div>
+        <h1 class="header_title">Taxi Dash</h1>
+    {% endif %}
 </header>
 
 <main class="main">
+    {% if error_message %}<p class="error"><strong>{{ error_message }}</strong></p>{% endif %}
     {% if passengers %}
-        <div class="list-msg">Other people can no longer see and join your trip now. Thank you and have a safe trip!
+        <div class="list-msg">
+            Other people can no longer see and join your trip now. Thank you and have a safe trip! <br>
+            You will be redirected to the home page in a few seconds...
         </div>
         {% for passenger in passengers %}
             <div class="card cardTemplate passenger">{{ passenger.name }}</div>

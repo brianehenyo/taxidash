@@ -20,7 +20,7 @@
     margin-right: 10px;
     text-indent: -30000px;
     overflow: hidden;
-    opacity: 0.54;
+    opacity: 0.1;
     -webkit-transition: opacity 0.333s cubic-bezier(0, 0, 0.21, 1);
     transition: opacity 0.333s cubic-bezier(0, 0, 0.21, 1);
     border: none;
@@ -28,9 +28,9 @@
     cursor: pointer;
 }
 
-.headerButton:hover {
-    opacity: 1;
-}
+/*.headerButton:hover {*/
+    /*opacity: 1;*/
+/*}*/
 
 #butTaxiList {
     background-color: transparent;

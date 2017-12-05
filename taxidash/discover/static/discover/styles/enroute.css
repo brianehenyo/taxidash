@@ -33,6 +33,13 @@
     height: 30px;
 }
 
+.header #taxidashIcon {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+    background: url('../images/ic_taxi_24px.png') center center no-repeat;
+}
+
 .headerButton:hover {
     opacity: 1;
     cursor: pointer;
