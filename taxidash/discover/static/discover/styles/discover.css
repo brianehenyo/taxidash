@@ -32,8 +32,20 @@
     opacity: 1;
 }
 
-.header #butRefresh {
-    background: url("../images/ic_refresh_24px.svg") center center no-repeat;
+#butTaxiList {
+    background-color: transparent;
+    border-style: solid;
+    border-radius: 5px;
+    border-width: thin;
+    color: rebeccapurple;
+    border-color: rebeccapurple;
+    padding: 3px;
+    text-decoration: none;
+    margin-right: 15px;
+    font-size: 14px;
+    width: 80px;
+    height: 30px;
+    text-align: center;
 }
 
 .header #butAdd {
@@ -47,13 +59,19 @@
     background: url('../images/ic_taxi_24px.png') center center no-repeat;
 }
 
+.header #header-form {
+    width: 24px;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
 .list-msg {
     margin-left: 15px;
     margin-top: 10px;
 }
 
 .loader {
-    visibility: hidden;
     left: 50%;
     top: 50%;
     height: 60px;
@@ -64,6 +82,7 @@
     position: fixed;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+    opacity: 1;
 }
 
 .loader #spinner {
@@ -195,6 +214,7 @@
 .dialog {
     background: #FFF;
     border-radius: 2px;
+    border-color: rebeccapurple;
     box-shadow: 0 0 14px rgba(0, 0, 0, 0.24), 0 14px 28px rgba(0, 0, 0, 0.48);
     min-width: 280px;
     position: absolute;
@@ -208,19 +228,14 @@
     transition: transform 0.333s cubic-bezier(0, 0, 0.21, 1) 0.05s, -webkit-transform 0.333s cubic-bezier(0, 0, 0.21, 1) 0.05s;
 }
 
-/*.dialog > div {*/
-    /*padding-left: 10px;*/
-    /*padding-right: 10px;*/
-/*}*/
-
 .dialog-title {
     padding: 10px;
     font-size: 1.25em;
     color: #FFFFFF;
-    background-color: #2CBAFF;
+    background-color: rebeccapurple;
 }
 
-.dialog-body{
+.dialog-body {
     margin: 10px;
 }
 
@@ -235,37 +250,38 @@
     margin: 10px;
 }
 
-.dialog-buttons input,button {
+.dialog-buttons input, button {
     width: 100%;
     font-size: 1em;
 }
 
 .dialog-organizer {
-    color: #2CBAFF;
+    color: rebeccapurple;
 }
 
 .preferred {
-    background-color: #2CBAFF;
-    border-color: #2CBAFF;
+    background-color: rebeccapurple;
+    border-color: rebeccapurple;
     color: #FFFFFF;
 }
 
 input[id*="Cancel"] {
     background-color: #FFFFFF;
-    border-color: #2CBAFF;
-    color: #2CBAFF;
-}
-
-.dialog-info {
-    margin-top: 10px;
+    border-color: rebeccapurple;
+    color: rebeccapurple;
+    margin-right: 5px;
 }
 
 .card {
-    padding: 16px;
+    padding: 10px;
     position: relative;
     box-sizing: border-box;
     background: #FFB356;
     border-radius: 2px;
     margin: 16px;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+
+.dialog-info {
+    margin-top: 10px;
 }

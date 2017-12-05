@@ -10,35 +10,39 @@
 </head>
 <body>
 <header class="header">
-    <div id="taxidashIcon"></div>
-    <h1 class="header_title">Taxi Dash</h1>
-    <form action="{% url 'discover:index' %}" method="get">
-        <button id="butCancel" class="headerButton" aria-label="Cancel"></button>
-    </form>
+    <div class="left">
+        <div class="organizer label">{{ trip.organizer }}</div>
+        <div class="meetup-point">
+            <div class="locpin"></div>
+            <div class="location">{{ trip.meetup_pt }}</div>
+        </div>
+    </div>
+    <div>
+        <form action="{% url 'discover:leave' %}" method="post">
+            {% csrf_token %}
+            <button id="butLeave" class="headerButton" aria-label="Leave">Leave</button>
+            <input type="hidden" id="hdnTripID" name="trip_id" value="{{ trip.id }}">
+        </form>
+    </div>
 </header>
 
 <main class="main">
-    {% if trips %}
-        <div class="list-msg">Here are the trips near you:</div>
-        {% for trip in trips %}
-            <div class="card cardTemplate trip">
-                <div class="left">
-                    <div class="organizer label"><a href="{% url 'discover:detail' trip.id %}">{{ trip.organizer }}</a></div>
-                    <div class="meetup-point">
-                        <div class="locpin"></div><div class="location"><a href="{% url 'discover:detail' trip.id %}">{{ trip.meetup_pt }}</a></div>
-                    </div>
-                </div>
-                <div class="right">
-                    <div class="label">Available seats</div>
-                    <div class="seats">
-                        <span class="available">{{ trip.avail_passengers }}</span><span class="maxSeats">/4人</span>
-                    </div>
-                </div>
-            </div>
+    {% if passengers %}
+        <div class="list-msg">{{ passengers|length }}/4 Passengers:</div>
+        {% for passenger in passengers %}
+            <div class="card cardTemplate passenger">{{ passenger.name }}</div>
         {% endfor %}
     {% else %}
-        <div class="list-msg">There are 0 trips available. Press the (+) icon to organize a new one. </div>
+        <div class="list-msg">There are 0 passengers.</div>
     {% endif %}
+    <div>
+        <form id="detail-actions" action="{% url 'discover:enroute' %}" method="post">
+            {% csrf_token %}
+            <a id="butTaxiList" href="{% url 'discover:taxiList' %}">Call a taxi</a>
+            <button type="submit" id="butEnroute" class="button preferred">Start trip</button>
+            <input type="hidden" id="hdnTripID" name="trip_id" value="{{ trip.id }}">
+        </form>
+    </div>
 </main>
 </body>
 </html>
