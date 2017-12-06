@@ -9,7 +9,7 @@ class TripAdmin(admin.ModelAdmin):
     list_display = ('organizer', 'meetup_pt', 'date', 'status')
 
 class PassengerAdmin(admin.ModelAdmin):
-    list_display = ('name', 'trip')
+    list_display = ('name', 'trip', 'ip', 'latitude', 'longitude')
 
 class TaxiCompanyAdmin(admin.ModelAdmin):
     list_display = ('name', 'contact')

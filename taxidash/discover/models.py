@@ -30,6 +30,9 @@ class Trip(models.Model):
 class Passenger(models.Model):
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
+    ip = models.CharField('IP', max_length=15, default='127.0.0.1')
+    latitude = models.FloatField('Latitude', blank=True, null=True, default=41.8415321)
+    longitude = models.FloatField('Longitude', blank=True, null=True, default=140.7668693)
 
     def __str__(self):
         return self.name

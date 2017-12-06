@@ -65,6 +65,7 @@
     {% else %}
         <script>
             console.log({{ redirect }});
+            console.log({{ trip }});
             window.setTimeout(function () {
                 window.location.href = "/discover/" + "{{ redirect }}" + "/detail/";
             }, 3000);

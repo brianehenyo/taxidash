@@ -13,24 +13,31 @@ from datetime import datetime, timedelta
 MAX_PASSENGERS = 4
 ALLOWABLE_DIST = 0.4
 
-
 def index(request):
-    if request.session['joined_trip'] != -1:
-        context = {'error_message': "You cannot join another trip. You will be redirected...",
-                   'redirect': request.session['joined_trip']}
-        return render(request, 'discover/discover.html', context)
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[-1].strip()
     else:
+        ip = request.META.get('REMOTE_ADDR')
+
+    try:
+        request.session['joined_trip']
+    except KeyError:
+        request.session['joined_trip'] = -1
         request.session['prevPage'] = 'index'
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            ip = x_forwarded_for.split(',')[-1].strip()
-        else:
-            ip = request.META.get('REMOTE_ADDR')
-        context = {'ip': ip}
-
         request.session['host_ip'] = ip
+        return render(request, 'discover/discover.html')
+    else:
+        if request.session['joined_trip'] != -1:
+            context = {'error_message': "You cannot join another trip. You will be redirected...",
+                       'redirect': request.session['joined_trip']}
+            return render(request, 'discover/discover.html', context)
+        else:
+            request.session['prevPage'] = 'index'
+            context = {'ip': ip}
+            request.session['host_ip'] = ip
 
-        return render(request, 'discover/discover.html', context)
+            return render(request, 'discover/discover.html', context)
 
 
 def refreshtrips(request):
@@ -68,7 +75,15 @@ def refreshtrips(request):
 
 
 def taxiList(request):
+    try:
+        request.session['prevPage']
+        request.session['joined_trip']
+    except:
+        request.session['prevPage'] = 'index'
+        request.session['joined_trip'] = -1
+
     taxi_companies = TaxiCompany.objects.all()
+
     context = {'trip_id': request.session['joined_trip'],
                'referer': request.session['prevPage'],
                'companies': taxi_companies}
@@ -115,15 +130,22 @@ def detail(request, trip_id):
         context = {'error_message': "This trip does not exist :("}
         return render(request, 'discover/trip.html', context)
     else:
-        if trip_id != request.session['joined_trip']:
+        try:
+            request.session['joined_trip']
+        except KeyError:
             context = {'error_message': "You did not join this trip. You will be redirected...",
-                       'redirect': request.session['joined_trip']}
+                       'redirect': -1}
+            return render(request, 'discover/trip.html', context)
         else:
-            passengers = Passenger.objects.filter(trip=trip)
-            request.session['prevPage'] = 'detail'
-            context = {'trip': trip,
-                       'passengers': passengers}
-        return render(request, 'discover/trip.html', context)
+            if int(trip_id) != int(request.session['joined_trip']):
+                context = {'error_message': "You did not join this trip. You will be redirected...",
+                           'redirect': request.session['joined_trip']}
+            else:
+                passengers = Passenger.objects.filter(trip=trip)
+                request.session['prevPage'] = 'detail'
+                context = {'trip': trip,
+                           'passengers': passengers}
+            return render(request, 'discover/trip.html', context)
 
 
 def join(request):
@@ -136,11 +158,18 @@ def join(request):
         return render(request, 'discover/discover.html', context)
     else:
         request.session['passenger'] = passenger
+        latitude = request.session['latitude']
+        longitude = request.session['longitude']
+
+        lat = float(latitude)
+        long = float(longitude)
+
+        ip = request.session['host_ip']
 
         join_trip = Trip.objects.get(pk=trip_id)
         passengers = Passenger.objects.filter(trip=join_trip)
         if passengers.count() < 4 and join_trip.status == 'ACT':
-            new_passenger = Passenger(trip=join_trip, name=passenger)
+            new_passenger = Passenger(trip=join_trip, name=passenger, ip=ip, latitude=lat, longitude=long)
             new_passenger.save()
             request.session['joined_trip'] = trip_id
             request.session['passengerID'] = new_passenger.id
@@ -173,50 +202,53 @@ def leave(request):
 
 
 def organize(request):
-    latitude = request.POST.get('latitude')
-    longitude = request.POST.get('longitude')
+    if request.POST.get('latitude') is not None and request.POST.get('longitude') is not None:
+        latitude = request.POST.get('latitude')
+        longitude = request.POST.get('longitude')
 
-    request.session['latitude'] = latitude
-    request.session['longitude'] = longitude
+        request.session['latitude'] = latitude
+        request.session['longitude'] = longitude
 
-    lat = float(latitude)
-    long = float(longitude)
-    distance_range = float(ALLOWABLE_DIST)
+        lat = float(latitude)
+        long = float(longitude)
+        distance_range = float(ALLOWABLE_DIST)
 
-    rough_distance = units.degrees(arcminutes=units.nautical(kilometers=distance_range)) * 2
+        rough_distance = units.degrees(arcminutes=units.nautical(kilometers=distance_range)) * 2
 
-    all_meetup_pts = Meetup.objects.filter(latitude__range=(lat - rough_distance, lat + rough_distance),
-                                           longitude__range=(long - rough_distance, long + rough_distance))
+        all_meetup_pts = Meetup.objects.filter(latitude__range=(lat - rough_distance, lat + rough_distance),
+                                               longitude__range=(long - rough_distance, long + rough_distance))
 
-    nearby = []
-    for meetup_pt in all_meetup_pts:
-        if meetup_pt.latitude and meetup_pt.longitude:
-            exact_distance = distance.distance(
-                (lat, long),
-                (meetup_pt.latitude, meetup_pt.longitude)
-            ).kilometers
+        nearby = []
+        for meetup_pt in all_meetup_pts:
+            if meetup_pt.latitude and meetup_pt.longitude:
+                exact_distance = distance.distance(
+                    (lat, long),
+                    (meetup_pt.latitude, meetup_pt.longitude)
+                ).kilometers
 
-            if exact_distance <= distance_range:
-                meetup_pt.distance = exact_distance
-                nearby.append(meetup_pt)
+                if exact_distance <= distance_range:
+                    meetup_pt.distance = exact_distance
+                    nearby.append(meetup_pt)
 
-    sorted(nearby, key=lambda m: m.distance)
+        sorted(nearby, key=lambda m: m.distance)
 
-    context = {'nearby_meetups': nearby}
-    return render(request, 'discover/organize.html', context)
-
+        context = {'nearby_meetups': nearby}
+        return render(request, 'discover/organize.html', context)
+    else:
+        return HttpResponseRedirect(reverse('discover:index'))
 
 def createTrip(request):
     organizer = request.POST.get('organizer')
     selected_meetup = request.POST.get('choice')
     organizer = organizer.strip(' ')
 
-    if len(organizer) == 0:
-        latitude = request.session['latitude']
-        longitude = request.session['longitude']
+    latitude = request.session['latitude']
+    longitude = request.session['longitude']
 
-        lat = float(latitude)
-        long = float(longitude)
+    lat = float(latitude)
+    long = float(longitude)
+
+    if len(organizer) == 0:
         distance_range = float(ALLOWABLE_DIST)
 
         rough_distance = units.degrees(arcminutes=units.nautical(kilometers=distance_range)) * 2
@@ -248,7 +280,8 @@ def createTrip(request):
         new_trip = Trip(meetup_pt=new_meetup, organizer=organizer, date=timezone.now() + timedelta(hours=9))
         new_trip.save()
 
-        new_passenger = Passenger(trip=new_trip, name=organizer)
+        ip = request.session['host_ip']
+        new_passenger = Passenger(trip=new_trip, name=organizer, ip=ip, latitude=lat, longitude=long)
         new_passenger.save()
 
         request.session['joined_trip'] = new_trip.id

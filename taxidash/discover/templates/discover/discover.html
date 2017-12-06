@@ -33,13 +33,15 @@
 <header class="header">
     <div id="taxidashIcon"></div>
     <h1 class="header_title">Taxi Dash</h1>
-    <a id="butTaxiList" href="{% url 'discover:taxiList' %}">Call a taxi</a>
-    <form id="header-form" action="{% url 'discover:organize' %}" method="post">
-        {% csrf_token %}
-        <button id="butAdd" class="headerButton" aria-label="Add" disabled="true"></button>
-        <input type="hidden" id="hdnLatitude" name="latitude">
-        <input type="hidden" id="hdnLongitude" name="longitude">
-    </form>
+    {% if not error_message %}
+        <a id="butTaxiList" href="{% url 'discover:taxiList' %}">Call a taxi</a>
+        <form id="header-form" action="{% url 'discover:organize' %}" method="post">
+            {% csrf_token %}
+            <button id="butAdd" class="headerButton" aria-label="Add" disabled="true"></button>
+            <input type="hidden" id="hdnLatitude" name="latitude">
+            <input type="hidden" id="hdnLongitude" name="longitude">
+        </form>
+    {% endif %}
 </header>
 
 <div class="loader">
