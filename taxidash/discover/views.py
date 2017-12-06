@@ -182,11 +182,9 @@ def join(request):
 
 def leave(request):
     trip_id = request.session['joined_trip']
-    pass_name = request.session['passenger']
     pass_ID = request.session['passengerID']
 
     trip = Trip.objects.get(pk=trip_id)
-    # passenger = Passenger.objects.get(name=pass_name, trip=trip)
     passenger = Passenger.objects.get(pk=pass_ID)
     passenger.delete()
 
@@ -196,6 +194,7 @@ def leave(request):
         trip.save()
 
     request.session['joined_trip'] = -1
+    request.session['passenger'] = ""
     request.session['passengerID'] = -1
 
     return HttpResponseRedirect(reverse('discover:index'))
